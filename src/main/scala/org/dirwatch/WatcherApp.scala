@@ -64,8 +64,10 @@ class WatcherArgs {
 object WatcherApp extends App {
   val arguments = new WatcherArgs
   val parser = new CmdLineParser(arguments)
-  val (switches, commands) = args.splitAt(4)
+  val dashesPos = args.indexOf("--")
+  require(dashesPos != -1)
+  val (switches, commands) = args.splitAt(dashesPos)
   parser.parseArgument(switches: _*)
-  val watcher = new WatchDir(arguments.dir, arguments.glob, commands)
+  val watcher = new WatchDir(arguments.dir, arguments.glob, commands.drop(1))
   watcher.run()
 }
